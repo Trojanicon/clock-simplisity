@@ -1,0 +1,57 @@
+import turtle
+import time
+import math
+
+#Setz up the screen
+wn = turtle.Screen()
+wn.title("Analog Clock")
+wn.bgcolor("black")
+wn.setup(width=500, height=500)
+
+clock = turtle.Turtle()
+clock.hideturtle()
+clock.speed(0)
+
+def draw_hand(angle, length, color, width):
+    clock.color(color)
+    clock.width(width)
+    clock.penup()
+    clock.goto(0, 0)
+    clock.setheading(90 - angle)
+    clock.pendown()
+    clock.forward(length)
+
+def draw_clock():
+    clock.clear()
+
+    clock.color("white")
+    clock.width(3)
+    clock.penup()
+    clock.goto(0, -200)
+    clock.setheading(0)
+    clock.pendown()
+    clock.circle(200)
+
+    now = time.localtime()
+
+    sec = now.tm_sec
+    minute = now.tm_min
+    hour = now.tm_hour % 12
+
+    sec_angle = sec * 6
+    minute_angle = minute * 6 + sec * 0.1
+    hour_angle = hour * 30 + minute * 0.5
+
+    draw_hand(sec_angle, 170, "red", 2)
+    draw_hand(minute_angle, 140, "green", 4)
+    draw_hand(hour_angle, 100, "blue", 6)   
+
+    clock.penup()
+    clock.goto(0, -5)
+    clock.dot(10, "white")
+    clock.dot(10)
+
+    wn.ontimer(draw_clock, 1000)
+
+draw_clock()
+wn.mainloop()
