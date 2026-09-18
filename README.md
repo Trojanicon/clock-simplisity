@@ -8,4 +8,7 @@ An event-driven analog clock that replaces the blocking while loop with Turtle's
 clock3.py: 
 The most complete design, separating static and dynamic elements using two turtles. It draws a detailed face once—including tick marks and hour numbers (1–12) and updates only the moving clock hands each second.
 
+clock4.py:
+A polished event-driven analog clock. It draws the full face once, tick marks and hour numbers and updates only the hands every 50 ms via ontimer, giving a smooth sweeping second hand, hand tails, a center dot, and a digital time and date display.
+
 imrovemets by the day
