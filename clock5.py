@@ -8,9 +8,10 @@ RADIUS = 190
 GAP = 60
 REFRESH_MS = 50
 CLOCKS = [
-    ("Local", None),
+    ("Home", None),
     ("New York", "America/New_York"),
     ("Tokyo", "Asia/Tokyo"),
+    ("London", "Europe/London")
 ]
 
 
