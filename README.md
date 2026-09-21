@@ -13,4 +13,8 @@ A polished event-driven analog clock. It draws the full face once, tick marks an
 
 clock5.py
 
+
+clock6.py: 
+A multi-timezone analog clock built from a Clock class, an Alarm class and an App class. Each clock draws its face once (tick marks and hour numbers) and redraws only the hands, digital time and date every 50 ms via ontimer, giving a smooth sweeping second hand. Several clocks can share one window, each set to an IANA timezone (Local, New York and Tokyo by default). Keyboard controls: T cycles between dark, light and neon themes, A sets a local-time alarm, and C clears or dismisses it. When the alarm fires, the background flashes and the Tk bell rings for 15 seconds.
+
 imrovemets by the day
