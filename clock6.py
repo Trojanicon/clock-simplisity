@@ -10,9 +10,10 @@ GAP = 60
 REFRESH_MS = 50
 RING_SECONDS = 15
 CLOCKS = [
-    ("Local", None),
+    ("Home", None),
     ("New York", "America/New_York"),
     ("Tokyo", "Asia/Tokyo"),
+    ("London", "Europe/London"),
 ]
 THEMES = {
     "dark": {

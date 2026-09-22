@@ -4,6 +4,7 @@ import math
 import os
 import subprocess
 import sys
+import random
 import tkinter
 from datetime import datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -19,7 +20,6 @@ CLOCKS = [
     ("Local", None),
     ("New York", "America/New_York"),
     ("Tokyo", "Asia/Tokyo"),
-    ("London", "Europe/London")
 ]
 THEMES = {
     "dark": {
@@ -51,14 +51,27 @@ THEMES = {
     },
 }
 
+SPLASH_IMAGE = "clockimage1.jpg"
+LOADING_STEPS = [
+    "Winding the mainspring...",
+    "Aligning the hour hand...",
+    "Calibrating timezones...",
+    "Polishing the clock face...",
+    "Waking up the alarm...",
+    "Syncing with the atomic clock...",
+]
+PRESS_KEY = "space"
+FILL_PER_PRESS = 3
+DECAY_PER_TICK = 1.2
+TICK_MS = 40
+
 
 def play_sound():
     if not os.path.exists(SOUND_FILE):
         return False
     try:
         if sys.platform.startswith("win"):
-            import winsound
-            winsound.PlaySound(SOUND_FILE, winsound.SND_FILENAME | winsound.SND_ASYNC)
+            os.startfile(SOUND_FILE)
         elif sys.platform == "darwin":
             subprocess.Popen(["afplay", SOUND_FILE])
         else:
@@ -66,6 +79,71 @@ def play_sound():
     except (OSError, RuntimeError):
         return False
     return True
+
+
+def show_splash():
+    splash = tkinter.Tk()
+    splash.overrideredirect(True)
+    splash.configure(bg="black")
+
+    img = Image.open(SPLASH_IMAGE)
+    photo = ImageTk.PhotoImage(img)
+    img_w, img_h = img.size
+
+    pad = 20
+    win_w = img_w
+    win_h = img_h + 90
+
+    screen_w = splash.winfo_screenwidth()
+    screen_h = splash.winfo_screenheight()
+    x = (screen_w - win_w) // 2
+    y = (screen_h - win_h) // 2
+    splash.geometry(f"{win_w}x{win_h}+{x}+{y}")
+
+    tkinter.Label(splash, image=photo, bd=0).pack()
+
+    canvas = tkinter.Canvas(splash, width=win_w - pad * 2, height=14,
+                             bg="#222222", highlightthickness=1,
+                             highlightbackground="#555555")
+    canvas.pack(padx=pad, pady=(10, 4))
+    bar = canvas.create_rectangle(0, 0, 0, 14, fill="#00c853", width=0)
+    bar_width = win_w - pad * 2
+
+    status = tkinter.Label(splash, text=f"Press [{PRESS_KEY.upper()}] to load",
+                            fg="white", bg="black", font=("Arial", 10))
+    status.pack()
+
+    progress = {"pct": 0.0}
+
+    def on_press(event):
+        progress["pct"] = min(100.0, progress["pct"] + FILL_PER_PRESS)
+
+        splash.bind(f"<KeyPress-{PRESS_KEY}>", on_press)
+    splash.bind("<Key>", on_press)
+
+    def grab_focus():
+        splash.attributes("-topmost", True)
+        splash.lift()
+        splash.focus_force()
+        splash.grab_set()
+
+    splash.after(100, grab_focus)
+
+    def tick():
+        progress["pct"] = max(0.0, progress["pct"] - DECAY_PER_TICK)
+        pct = progress["pct"]
+
+        canvas.coords(bar, 0, 0, bar_width * pct / 100, 14)
+        msg_index = min(len(LOADING_STEPS) - 1, int(pct) * len(LOADING_STEPS) // 100)
+        status.config(text=f"{LOADING_STEPS[msg_index]}  ({int(pct)}%)")
+
+        if pct >= 100:
+            splash.after(200, splash.destroy)
+        else:
+            splash.after(TICK_MS, tick)
+
+    tick()
+    splash.mainloop()
 
 
 class Clock:
@@ -338,25 +416,8 @@ class App:
             self.wn.mainloop()
         except turtle.Terminator:
             pass
-    def show_splash(duration_ms=2000):
-        splash = tkinter.Tk()
-        splash.overrideredirect(True)
 
-        img = Image.open("clockimage1.jpg")
-        photo = ImageTk.PhotoImage(img)
-
-        width, height = img.size
-        screen_width = splash.winfo_screenwidth()
-        screen_height = splash.winfo_screenheight()
-        x = (screen_width - width) // 2
-        y = (screen_height - height) // 2
-        splash.geometry(f"{width}x{height}+{x}+{y}")
-
-        label = tkinter.Label(splash, image=photo)
-        label.pack()    
-
-        splash.after(duration_ms, splash.destroy)
-        splash.mainloop()    
 
 if __name__ == "__main__":
+    show_splash()
     App().run()

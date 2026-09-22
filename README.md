@@ -20,4 +20,6 @@ A multi-timezone analog clock built from a Clock class, an Alarm class and an Ap
 clock7;
 
 
+clock_advanced1.py: still a work in progress, will fix it soon 
+
 imrovemets by the day
