@@ -119,7 +119,6 @@ def show_splash():
     progress = {"pct": 0.0}
 
     def on_press(event):
-        print("key pressed:", event.keysym)
         progress["pct"] = min(100.0, progress["pct"] + FILL_PER_PRESS)
 
     splash.bind("<Key>", on_press)
@@ -128,7 +127,6 @@ def show_splash():
         splash.attributes("-topmost", True)
         splash.lift()
         splash.focus_force()
-        splash.grab_set()
 
     splash.after(100, grab_focus)
 
