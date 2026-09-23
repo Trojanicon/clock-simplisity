@@ -83,7 +83,10 @@ def play_sound():
 
 def show_splash():
     splash = tkinter.Tk()
-    splash.overrideredirect(True)
+    try:
+        splash.wm_attributes("-type", "splash")
+    except tkinter.TclError:
+        splash.overrideredirect(True)
     splash.configure(bg="black")
 
     img = Image.open(SPLASH_IMAGE)
@@ -116,9 +119,9 @@ def show_splash():
     progress = {"pct": 0.0}
 
     def on_press(event):
+        print("key pressed:", event.keysym)
         progress["pct"] = min(100.0, progress["pct"] + FILL_PER_PRESS)
 
-        splash.bind(f"<KeyPress-{PRESS_KEY}>", on_press)
     splash.bind("<Key>", on_press)
 
     def grab_focus():
