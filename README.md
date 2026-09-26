@@ -22,4 +22,7 @@ clock7;
 
 clock_advanced1.py: still a work in progress, will fix it soon 
 
+Digital1.py:
+This one uses plain tkinter instead of turtle, since a digital display is just text rather than drawing hands, which keeps it much simpler and lighter than the analogue one
+
 imrovemets by the day
