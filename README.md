@@ -27,4 +27,13 @@ Merges clock7 with a "mash to load" splash screen shown before the clock window 
 digital1.py:
 The start of a separate digital-watch series. Uses plain tkinter instead of Turtle, since a digital display is just text rather than drawn hands, keeping it much simpler and lighter than the analog series. Shows time and date in an LCD-style green-on-black display, with an F key to toggle 12/24-hour format.
 
+digital2.py:
+Rebuilds the LCD display with plain rectangle segments instead of a system font, using a SEGMENTS maps and no classes just a flat list of segment IDs per digit and a couple of small functions. Much shorter than the first attempt, at the cost of a blockier look than a true seven-segment shape. Blinking colon and F-key 12/24h toggle carried over from digital1.
+
+digital3.py:
+Adds mode switching on top of digital2's segment rendering. M cycles between Time, Date and Stopwatch, reusing the same six digits for all three. The colon now blinks correctly once per second. Stopwatch mode tracks elapsed time from a start timestamp rather than counting ticks, so it stays accurate under lag—Space starts/stops it, R resets it.
+
+digital4.py:
+Adds backlight simulation to digital3. After 5 seconds of no input(this is an issue coz when the stopwatch is running, ina go blxk pia, will think on hoe to fix that later), the display dims to a muted green and the status line reads "asleep—press any key to wake." Any keypress or click instantly restores full brightness. All existing controls; M, F, Space, R.... still work and count as activity.
+
 improvements by the day
